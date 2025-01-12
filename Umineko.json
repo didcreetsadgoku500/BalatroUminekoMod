@@ -8,7 +8,7 @@
 	"main_file": "Umineko.lua",
 	"priority": 12,
 	"badge_colour": "ffa90a",
-	"badge_text_colour": "c17723",
+	"badge_text_colour": "f5f0e4",
 	"version": "0.1.0",
 	"dependencies": []
 }
