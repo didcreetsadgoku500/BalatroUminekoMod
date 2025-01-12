@@ -1,0 +1,14 @@
+{
+	"id": "krons_umineko_mod",
+	"name": "Hand of the Golden Witch",
+	"display_name": "GW",
+	"author": ["Kron05"],
+	"description": "Adds two new jokers based on Umineko no Naku Koro Ni",
+	"prefix": "umineko",
+	"main_file": "Umineko.lua",
+	"priority": 12,
+	"badge_colour": "ffa90a",
+	"badge_text_colour": "c17723",
+	"version": "0.1.0",
+	"dependencies": []
+}
