@@ -144,23 +144,48 @@ SMODS.Atlas {
         -- sendInfoMessage(random_card.base.value, "My Debug Card Value")
         -- sendInfoMessage("Debug point 0", "My Debug Card Value")
 
-        if not (card.ability.extra.twilight % 2 == 0) then
+        -- if not (card.ability.extra.twilight % 2 == 0) then
 
-          -- sendInfoMessage("Debug point 1", "My Debug Card Value")
+        --   -- sendInfoMessage("Debug point 1", "My Debug Card Value")
 
-          local destroyed_cards = random_destroy_many(card, 2)
-          -- sendInfoMessage("Debug point 2", "My Debug Card Value")
+        --   local destroyed_cards = random_destroy_many(card, 2)
+        --   -- sendInfoMessage("Debug point 2", "My Debug Card Value")
 
+        --   for k, v in pairs(destroyed_cards) do
+        --     card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
+        --   end
+        -- else
+        --   sendInfoMessage(#card.ability.extra.consumed_cards, "Cards Consumed Count")
+        --   generate_playing_cards(card.ability.extra.consumed_cards)
+        --   card.ability.extra.consumed_cards = {}
+        -- end
+       
+        -- card.ability.extra.twilight = card.ability.extra.twilight + 1
+
+        if (card.ability.extra.twilight == 1) then
+          local destroyed_cards = random_destroy_many(card, 6)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
-        else
-          sendInfoMessage(#card.ability.extra.consumed_cards, "Cards Consumed Count")
-          generate_playing_cards(card.ability.extra.consumed_cards)
-          card.ability.extra.consumed_cards = {}
+        elseif (card.ability.extra.twilight == 2) then
+          local destroyed_cards = random_destroy_many(card, 2)
+          for k, v in pairs(destroyed_cards) do
+            card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
+          end
+        elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight < 9) then
+          local destroyed_cards = random_destroy_many(card, 1)
+          for k, v in pairs(destroyed_cards) do
+            card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
+          end
+        elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight == 9) then
+          -- On the ninth twilight, the witch shall revive, and none shall be left alive.
+          -- TODO
+          local destroyed_cards = random_destroy_many(card, G.hand.cards)
+          for k, v in pairs(destroyed_cards) do
+            card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
+          end
+
         end
-       
-        card.ability.extra.twilight = card.ability.extra.twilight + 1
 
         return {
             message = 'Upgraded!',
