@@ -71,6 +71,38 @@ SMODS.Atlas {
   end
 
 
+
+
+  local function generate_playing_cards(cards)
+    G.E_MANAGER:add_event(Event({
+      trigger = 'after',
+      delay = 0.4,
+      func = function()
+        local new_cards = {}
+        local _first_dissolve = nil
+
+        for i = #cards, 1, -1 do
+          -- sendInfoMessage(c.base.value, "My Debug Card Value")
+
+          local _card = copy_card(cards[i], nil, nil, G.playing_card)
+          _card:add_to_deck()
+          G.deck.config.card_limit = G.deck.config.card_limit + 1
+          table.insert(G.playing_cards, _card)
+          G.deck:emplace(_card)
+          _card:start_materialize(nil, _first_dissolve)
+          _first_dissolve = true
+          new_cards[#new_cards+1] = _card
+        end
+        playing_card_joker_effects(new_cards)
+
+        return true
+      end
+    }))
+  end
+
+
+
+
   SMODS.Joker {
     key = 'my-joker',
     loc_txt = {
@@ -82,7 +114,7 @@ SMODS.Atlas {
     config = { 
         extra = { 
             consumed_cards = {},
-            hands_played = 0,
+            twilight = 1,
             
         
         } },
@@ -112,45 +144,23 @@ SMODS.Atlas {
         -- sendInfoMessage(random_card.base.value, "My Debug Card Value")
         -- sendInfoMessage("Debug point 0", "My Debug Card Value")
 
-        if not (card.ability.extra.hands_played % 2 == 0) then
-          sendInfoMessage("Debug point 1", "My Debug Card Value")
+        if not (card.ability.extra.twilight % 2 == 0) then
+
+          -- sendInfoMessage("Debug point 1", "My Debug Card Value")
 
           local destroyed_cards = random_destroy_many(card, 2)
-          sendInfoMessage("Debug point 2", "My Debug Card Value")
+          -- sendInfoMessage("Debug point 2", "My Debug Card Value")
 
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
         else
           sendInfoMessage(#card.ability.extra.consumed_cards, "Cards Consumed Count")
-          G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-              local new_cards = {}
-              local _first_dissolve = nil
-
-              for i = #card.ability.extra.consumed_cards, 1, -1 do
-                -- sendInfoMessage(c.base.value, "My Debug Card Value")
-
-                local _card = copy_card(card.ability.extra.consumed_cards[i], nil, nil, G.playing_card)
-                _card:add_to_deck()
-                G.deck.config.card_limit = G.deck.config.card_limit + 1
-                table.insert(G.playing_cards, _card)
-                G.deck:emplace(_card)
-                _card:start_materialize(nil, _first_dissolve)
-                _first_dissolve = true
-                new_cards[#new_cards+1] = _card
-              end
-              playing_card_joker_effects(new_cards)
-
-              return true
-            end
-          }))
-
+          generate_playing_cards(card.ability.extra.consumed_cards)
+          card.ability.extra.consumed_cards = {}
         end
        
-        card.ability.extra.hands_played = card.ability.extra.hands_played + 1
+        card.ability.extra.twilight = card.ability.extra.twilight + 1
 
         return {
             message = 'Upgraded!',
