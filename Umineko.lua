@@ -160,7 +160,6 @@ SMODS.Atlas {
         --   card.ability.extra.consumed_cards = {}
         -- end
        
-        -- card.ability.extra.twilight = card.ability.extra.twilight + 1
 
         if (card.ability.extra.twilight == 1) then
           local destroyed_cards = random_destroy_many(card, 6)
@@ -180,12 +179,13 @@ SMODS.Atlas {
         elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight == 9) then
           -- On the ninth twilight, the witch shall revive, and none shall be left alive.
           -- TODO
-          local destroyed_cards = random_destroy_many(card, G.hand.cards)
-          for k, v in pairs(destroyed_cards) do
-            card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
-          end
+          generate_playing_cards(card.ability.extra.consumed_cards)
+          card.ability.extra.consumed_cards = {}
 
         end
+
+        card.ability.extra.twilight = card.ability.extra.twilight + 1
+
 
         return {
             message = 'Upgraded!',
