@@ -85,7 +85,7 @@ SMODS.Atlas {
           -- sendInfoMessage(c.base.value, "My Debug Card Value")
 
           local _card = copy_card(cards[i], nil, nil, G.playing_card)
-          _card:set_ability(G.P_CENTERS.m_bonus, nil, true)
+          _card:set_ability(G.P_CENTERS.m_mult, nil, true)
           _card:add_to_deck()
           G.deck.config.card_limit = G.deck.config.card_limit + 1
           table.insert(G.playing_cards, _card)
@@ -105,91 +105,96 @@ SMODS.Atlas {
 
 
   SMODS.Joker {
-    key = 'my-joker',
+    key = 'Epitaph Joker',
     loc_txt = {
-      name = 'My Custom Joker',
+      name = 'Epitaph Joker',
       text = {
-        "My custom description"
+        -- "Destroys {C:attention}#1#{} card#2# after each", 
+        -- "played hand and gains {C:money}$#1#{} sell value", 
+        -- "or {S:1.1,C:red,E:2}self destructs{}. Returns cards",
+        -- "to deck with enhancements after",
+        -- "{C:attention}#3#{} hands played."
+        "Destroys cards after each ",
+        "played hand and gains sell value.",
+        "Returns cards to deck with",
+        "enhancements after {C:attention}#3#{} hands played.",
+        "{s:0.8}(Will destroy {s:0.8,C:attention}#1#{s:0.8} card#2# next hand){}"
       }
     },
     config = { 
         extra = { 
             consumed_cards = {},
             twilight = 1,
+            sacrifices_per_twilight = {
+                [1] = 6,
+                [2] = 2,
+                [3] = 0,
+                [4] = 1,
+                [5] = 1,
+                [6] = 1,
+                [7] = 1,
+                [8] = 1,
+                [9] = 0
+            },
             value_per_consumed = 1,
             base_sell_value = 3,
         
         } },
     loc_vars = function(self, info_queue, card)
-      return { vars = { } }
+      local sacrifices = card.ability.extra.sacrifices_per_twilight[card.ability.extra.twilight]
+      if not sacrifices then sacrifices = 0 end
+      return { vars = {
+        sacrifices,
+        (sacrifices ~= 1 and "s") or "",
+        10 - card.ability.extra.twilight } }
     end,
     rarity = 1,
     atlas = 'joker-sprites',
     pos = { x = 0, y = 0 },
-    cost = 2,
+    cost = 6,
     calculate = function(self, card, context)
-      -- Tests if context.joker_main == true.
-      -- joker_main is a SMODS specific thing, and is where the effects of jokers that just give +stuff in the joker area area triggered, like Joker giving +Mult, Cavendish giving XMult, and Bull giving +Chips.
-      -- if context.joker_main then
-        -- sendInfoMessage("Debug point -2", "My Debug Card Value")
-
-      --   return {
-      --     mult_mod = card.ability.extra.hands_played,
-      --     message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.hands_played } }
-      --   }
-      -- end
-
-      sendInfoMessage("Debug point -1", "My Debug Card Value")
 
       if context.after and context.cardarea == G.jokers then 
-        -- local random_card = pseudorandom_element(G.hand.cards, pseudoseed('random_destroy'))
-        -- sendInfoMessage(random_card.base.value, "My Debug Card Value")
-        -- sendInfoMessage("Debug point 0", "My Debug Card Value")
 
-        -- if not (card.ability.extra.twilight % 2 == 0) then
-
-        --   -- sendInfoMessage("Debug point 1", "My Debug Card Value")
-
-        --   local destroyed_cards = random_destroy_many(card, 2)
-        --   -- sendInfoMessage("Debug point 2", "My Debug Card Value")
-
+        -- if (card.ability.extra.twilight == 1) then
+        --   noCards = 6
+        --   local destroyed_cards = random_destroy_many(card, noCards)
         --   for k, v in pairs(destroyed_cards) do
         --     card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
         --   end
-        -- else
-        --   sendInfoMessage(#card.ability.extra.consumed_cards, "Cards Consumed Count")
+        -- elseif (card.ability.extra.twilight == 2) then
+        --   noCards = 2
+        --   local destroyed_cards = random_destroy_many(card, noCards)
+        --   for k, v in pairs(destroyed_cards) do
+        --     card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
+        --   end
+        -- elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight < 9) then
+        --   noCards = 1
+        --   local destroyed_cards = random_destroy_many(card, noCards)
+        --   for k, v in pairs(destroyed_cards) do
+        --     card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
+        --   end
+        -- elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight == 9) then
+        --   -- On the ninth twilight, the witch shall revive, and none shall be left alive.
         --   generate_playing_cards(card.ability.extra.consumed_cards)
         --   card.ability.extra.consumed_cards = {}
-        -- end
-       
 
-        if (card.ability.extra.twilight == 1) then
-          noCards = 6
-          local destroyed_cards = random_destroy_many(card, noCards)
+        -- end
+
+        twilight = card.ability.extra.twilight
+        
+        if twilight < 9 then
+          sacrifices = card.ability.extra.sacrifices_per_twilight[twilight]
+          destroyed_cards = random_destroy_many(card, sacrifices)
+          card.ability.extra_value = card.ability.extra_value + (#destroyed_cards * card.ability.extra.value_per_consumed)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
-        elseif (card.ability.extra.twilight == 2) then
-          noCards = 2
-          local destroyed_cards = random_destroy_many(card, noCards)
-          for k, v in pairs(destroyed_cards) do
-            card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
-          end
-        elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight < 9) then
-          noCards = 1
-          local destroyed_cards = random_destroy_many(card, noCards)
-          for k, v in pairs(destroyed_cards) do
-            card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
-          end
-        elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight == 9) then
-          -- On the ninth twilight, the witch shall revive, and none shall be left alive.
+        elseif twilight == 9 then
           generate_playing_cards(card.ability.extra.consumed_cards)
           card.ability.extra.consumed_cards = {}
-
         end
-
         card.ability.extra.twilight = card.ability.extra.twilight + 1
-        card.ability.extra_value = card.ability.extra_value + noCards
         card:set_cost()
 
         return {
