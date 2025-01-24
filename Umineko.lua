@@ -164,19 +164,19 @@ SMODS.Atlas {
        
 
         if (card.ability.extra.twilight == 1) then
-          local noCards = 6
+          noCards = 6
           local destroyed_cards = random_destroy_many(card, noCards)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
         elseif (card.ability.extra.twilight == 2) then
-          local noCards = 2
+          noCards = 2
           local destroyed_cards = random_destroy_many(card, noCards)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
         elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight < 9) then
-          local noCards = 1
+          noCards = 1
           local destroyed_cards = random_destroy_many(card, noCards)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
@@ -189,10 +189,11 @@ SMODS.Atlas {
         end
 
         card.ability.extra.twilight = card.ability.extra.twilight + 1
-
+        card.ability.extra_value = card.ability.extra_value + noCards
+        card:set_cost()
 
         return {
-            message = localize('k_value_up'),
+            message = "Value Up!",
             colour = G.C.MONEY,
             card = card
           }
