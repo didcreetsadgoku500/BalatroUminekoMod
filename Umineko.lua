@@ -85,6 +85,7 @@ SMODS.Atlas {
           -- sendInfoMessage(c.base.value, "My Debug Card Value")
 
           local _card = copy_card(cards[i], nil, nil, G.playing_card)
+          _card:set_ability(G.P_CENTERS.m_bonus, nil, true)
           _card:add_to_deck()
           G.deck.config.card_limit = G.deck.config.card_limit + 1
           table.insert(G.playing_cards, _card)
@@ -115,7 +116,8 @@ SMODS.Atlas {
         extra = { 
             consumed_cards = {},
             twilight = 1,
-            
+            value_per_consumed = 1,
+            base_sell_value = 3,
         
         } },
     loc_vars = function(self, info_queue, card)
@@ -162,23 +164,25 @@ SMODS.Atlas {
        
 
         if (card.ability.extra.twilight == 1) then
-          local destroyed_cards = random_destroy_many(card, 6)
+          local noCards = 6
+          local destroyed_cards = random_destroy_many(card, noCards)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
         elseif (card.ability.extra.twilight == 2) then
-          local destroyed_cards = random_destroy_many(card, 2)
+          local noCards = 2
+          local destroyed_cards = random_destroy_many(card, noCards)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
         elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight < 9) then
-          local destroyed_cards = random_destroy_many(card, 1)
+          local noCards = 1
+          local destroyed_cards = random_destroy_many(card, noCards)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
         elseif (card.ability.extra.twilight >= 4 and card.ability.extra.twilight == 9) then
           -- On the ninth twilight, the witch shall revive, and none shall be left alive.
-          -- TODO
           generate_playing_cards(card.ability.extra.consumed_cards)
           card.ability.extra.consumed_cards = {}
 
@@ -188,8 +192,8 @@ SMODS.Atlas {
 
 
         return {
-            message = 'Upgraded!',
-            colour = G.C.CHIPS,
+            message = localize('k_value_up'),
+            colour = G.C.MONEY,
             card = card
           }
       end
