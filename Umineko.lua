@@ -82,8 +82,6 @@ SMODS.Atlas {
         local _first_dissolve = nil
 
         for i = #cards, 1, -1 do
-          -- sendInfoMessage(c.base.value, "My Debug Card Value")
-
           local _card = copy_card(cards[i], nil, nil, G.playing_card)
           _card:set_ability(G.P_CENTERS.m_mult, nil, true)
           _card:add_to_deck()
@@ -118,7 +116,7 @@ SMODS.Atlas {
         "played hand and gains sell value.",
         "Returns cards to deck with",
         "enhancements after {C:attention}#3#{} hands played.",
-        "{s:0.8}(Will destroy {s:0.8,C:attention}#1#{s:0.8} card#2# next hand){}"
+        "{C:inactive,s:0.8}(Will destroy {s:0.8,C:attention}#1#{C:inactive,s:0.8} card#2# next hand){}"
       }
     },
     config = { 
@@ -148,7 +146,7 @@ SMODS.Atlas {
         (sacrifices ~= 1 and "s") or "",
         10 - card.ability.extra.twilight } }
     end,
-    rarity = 1,
+    rarity = 2,
     atlas = 'joker-sprites',
     pos = { x = 0, y = 0 },
     cost = 6,
@@ -185,6 +183,14 @@ SMODS.Atlas {
         
         if twilight < 9 then
           sacrifices = card.ability.extra.sacrifices_per_twilight[twilight]
+          if sacrifices == 0 then 
+            card.ability.extra.twilight = card.ability.extra.twilight + 1
+            return {
+              colour = G.C.JOKER_GREY,
+              card = card
+            }
+   
+          end
           destroyed_cards = random_destroy_many(card, sacrifices)
           card.ability.extra_value = card.ability.extra_value + (#destroyed_cards * card.ability.extra.value_per_consumed)
           for k, v in pairs(destroyed_cards) do
@@ -194,6 +200,11 @@ SMODS.Atlas {
         elseif twilight == 9 then
           generate_playing_cards(card.ability.extra.consumed_cards)
           card.ability.extra.consumed_cards = {}
+          card.ability.extra.twilight = card.ability.extra.twilight + 1
+        
+        else
+          return
+
         end
         card:set_cost()
 
