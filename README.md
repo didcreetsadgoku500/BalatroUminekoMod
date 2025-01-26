@@ -4,7 +4,7 @@
 
 | Joker  | Effect | Cost | Rarity  | Act |
 | :---: | :---: | :---: | :---: | :---: |
-| ![screenshot](assets/2x/joker-sprites.png) <br /> **Epitaph Joker**  | Destroys cards after each played hand and gains sell value. Returns cards to deck with enhancements after ${\color{goldenrod}\textbf{9}}$ hands played. *(Will destroy* ${\color{goldenrod}\textbf{6}}$ *cards next hand)* | $6  | `Uncommon`   | After hand |
+| ![screenshot](assets/2x/joker-sprites.png) <br /> **Epitaph Joker**  | Destroys cards after each played hand and gains sell value. Returns cards to deck with enhancements after ${\color{goldenrod}\textbf{10}}$ hands played. *(Will destroy* ${\color{goldenrod}\textbf{6}}$ *cards next hand)* | $6  | `Uncommon`   | After hand |
 
 The number of cards destroyed changes after each hand. <br />
 The first hand will consume 6 cards. <br />
