@@ -132,7 +132,8 @@ SMODS.Atlas {
                 [6] = 1,
                 [7] = 1,
                 [8] = 1,
-                [9] = 0
+                [9] = "all",
+                [10] = 0
             },
             value_per_consumed = 1,
             base_sell_value = 3,
@@ -144,7 +145,7 @@ SMODS.Atlas {
       return { vars = {
         sacrifices,
         (sacrifices ~= 1 and "s") or "",
-        10 - card.ability.extra.twilight } }
+        11 - card.ability.extra.twilight } }
     end,
     rarity = 2,
     atlas = 'joker-sprites',
@@ -181,7 +182,7 @@ SMODS.Atlas {
 
         twilight = card.ability.extra.twilight
         
-        if twilight < 9 then
+        if twilight < 10 then
           sacrifices = card.ability.extra.sacrifices_per_twilight[twilight]
           if sacrifices == 0 then 
             card.ability.extra.twilight = card.ability.extra.twilight + 1
@@ -191,13 +192,16 @@ SMODS.Atlas {
             }
    
           end
+          if sacrifices == "all" then
+            sacrifices = #G.hand.cards
+          end
           destroyed_cards = random_destroy_many(card, sacrifices)
           card.ability.extra_value = card.ability.extra_value + (#destroyed_cards * card.ability.extra.value_per_consumed)
           for k, v in pairs(destroyed_cards) do
             card.ability.extra.consumed_cards[#card.ability.extra.consumed_cards + 1] = v
           end
           card.ability.extra.twilight = card.ability.extra.twilight + 1
-        elseif twilight == 9 then
+        elseif twilight == 10 then
           generate_playing_cards(card.ability.extra.consumed_cards)
           card.ability.extra.consumed_cards = {}
           card.ability.extra.twilight = card.ability.extra.twilight + 1

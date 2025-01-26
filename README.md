@@ -11,7 +11,7 @@ The first hand will consume 6 cards. <br />
 The second hand will consume 2 cards. <br />
 The third hand will consume 0 cards. <br />
 The fourth through eighth hand will consume 1 card each. <br />
-The ninth hand will consume 0 cards. <br />
+The ninth hand will consume all cards held in hand. <br />
 
 
 On the tenth hand, at journey's end, you shall attain to the power of the Golden Land's treasures, once and for the last time. All previously consumed cards will be returned to your hand with added `Mult` enhancements.
