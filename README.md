@@ -5,7 +5,9 @@
 | Joker  | Effect | Cost | Rarity  | Act |
 | :---: | :---: | :---: | :---: | :---: |
 | ![screenshot](assets/2x/joker-sprites.png) <br /> **Epitaph Joker**  | Destroys cards after each played hand and gains sell value. Returns cards to deck with enhancements after ${\color{goldenrod}\textbf{10}}$ hands played. *(Will destroy* ${\color{goldenrod}\textbf{6}}$ *cards next hand)* | $6  | `Uncommon`   | After hand |
+| ![screenshot](assets/2x/joker-sprites.png) <br /> **Golden Sorcerer**  | Gives ${\color{red}\textbf{X0.7}}$ **Mult** for each ${\color{goldenrod}\textbf{Gold Card}}$ in your full deck. _(Currently_ ${\color{red}\textbf{X1}}$ _**Mult**)_ | $8  | `Uncommon`   | Independent |
 
+## Epitaph Joker
 The number of cards destroyed changes after each hand. <br />
 The first hand will consume 6 cards. <br />
 The second hand will consume 2 cards. <br />
